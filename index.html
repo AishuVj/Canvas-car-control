@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap" rel="stylesheet">
+    <title>Canvas Car Control</title>
+    <style>
+       /* @font-face {
+            font-family: 'street';
+            src: url('car.ttf');
+        }
+
+         @font-face {
+            font-family: 'button';
+            src: url('button.ttf');
+        }*/
+        
+        body{
+            margin :0;
+            padding :0;
+            font-family : Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        h1{
+            font-family: 'Orbitron', Arial, sans-serif;
+            font-size: 50px;
+            text-align: center;
+            margin: 10px;
+        }
+
+        #canvas-container{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+        #canvas{
+            border:2px solid #333;
+            border-radius: 10px;
+            background-image: url(map.png);
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .button-container{
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+
+        }
+
+        button{
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor:pointer;
+            border: none;
+            background-color: #565656;
+            color: white;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-family: 'Roboto', Arial, sans-serif;
+            flex: 1 1 150px;/* make buttons flexible/responsive */
+            min-width: 120px;/* prevent buttons from becoming too small */
+            max-width: 200px;
+            transition: background-color 0.2s ease;
+
+        }
+
+        button:hover{
+            background-color: #45a049;
+        }
+        @media (max-width: 600px) {
+            button {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 > Strret Screech</h1>
+    <div id="canvas-container">
+        <canvas
+        id="canvas" 
+        width="600"
+        height="400"
+        >
+        </canvas>
+    </div>
+    <br><br>
+<div class="button-container">
+    <button onclick="changeDirection('left')" >Turn Left</button>
+    <button onclick="changeDirection('right')" >Turn Right</button>
+    <button onclick="changeSpeed('increase')" >Increase Speed</button>
+    <button onclick="changeSpeed('decrease')" >Decrease Speed</button>
+    <button onclick="changeColor()" >Change color</button>
+</div>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        let car = {
+            x : canvas.width/2,
+            y : canvas.height/2,
+            direction : 0,
+            speed : 2,
+            color : "blue",
+            passenger : 4,
+            isMoving : false,
+        };
+
+        function drawCar() {
+            ctx.clearRect (0,0,canvas.width,canvas.height);
+            ctx.save();
+            ctx.translate(car.x,car.y);
+            ctx.rotate((car.direction* Math.PI) /180);
+            ctx.fillStyle = car.color;
+            ctx.fillRect(-15,-10,30,20); //car body
+            ctx.fillStyle = "black";
+            ctx.fillRect(-10,-8,20,16); //car windows
+            ctx.restore ();
+        }
+
+        function updateCar(){
+            car.x += car.speed * Math.cos((car.direction * Math.PI) /180);
+            car.y += car.speed * Math.sin((car.direction * Math.PI) /180);
+
+            if(car.x > canvas.width || car.x <0 || car.y > canvas.height || car.y <0)
+                {
+                    car.direction += 180; //turn the care around when it reaches te edge of the canvas
+                }
+
+        }
+
+        function changeDirection(turn){
+            if(turn === "left"){
+                car.direction -= 11.25;
+            }
+            else if (turn === "right"){
+                car.direction += 11.25;
+            }
+        }
+
+        function changeSpeed(action){
+            if(action === "increase"){
+                car.speed +=1;
+            }
+            else if(action === "decrease"){
+                car.speed -=1;
+          
+            if(car.speed<0) car.speed = 0;
+             }
+        }
+
+        function changeColor(){
+            car.color = prompt("Enter a color for the car:", car.color);
+        }
+
+        function gameLoop(){
+            updateCar();
+            drawCar();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    
+    </script>
+
+    
+</body>
+</html>
