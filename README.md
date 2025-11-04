@@ -13,7 +13,7 @@ A browser-based car control game built using HTML5 Canvas and JavaScript.
 - JavaScript (Canvas API)
 
 ## Live Demo
-[Play the game here](https://aishuvj.github.io/)
+[Play the game here](https://aishuvj.github.io/Canvas-car-control)
 
 ## How to Run Locally
 1. Clone the repository
